@@ -223,7 +223,7 @@ class GCG_pg:
                     not_allowed_ids=self.not_allowed_ids if objective == "pg" else None,
                 )
 
-                # Step D: text_genuate all candidates to make a selection
+                # Step D: text_generate all candidates to make a selection
 
                 if not force_text_gen:
                     loss_objective = "combined"
@@ -245,7 +245,7 @@ class GCG_pg:
                         padding=True,
                         add_special_tokens=False,
                     ).input_ids.to(self.pg_model.device)
-                    # ids_for_loss = self.text_gen_tokenizer(text_gen_strings, return_tensors='pt', padding=True, add_special_tokens=False).input_ids.to(self.pg_model.device)
+
                 else:
                     ids_for_loss = sampled_ids
 
@@ -273,7 +273,7 @@ class GCG_pg:
                     buffer.add(current_loss, (new_optim_ids_pg, new_optim_ids_text_gen))
 
                 # --- 4. Logging and Plotting ---
-                # Re-text_genuate the best new suffix to get its individual loss components for plotting
+                # Re-text generate the best new suffix to get its individual loss components for plotting
                 ids_for_plotting = new_optim_ids_pg
                 pg_loss_for_plot = self._compute_candidates_loss_pg(
                     1, ids_for_plotting, objective="pg"
@@ -288,7 +288,7 @@ class GCG_pg:
                 steps.append(step_num)
                 best_losses.append(buffer.get_lowest_loss())
 
-                # Test and text_genuate scores
+                # Text generation scores
                 test_output, cosine_sims, output_start = _test_prompt_output(
                     self.text_gen,
                     self.text_gen_tokenizer,
